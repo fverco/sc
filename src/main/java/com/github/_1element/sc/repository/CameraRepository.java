@@ -5,17 +5,12 @@ import com.github._1element.sc.domain.CameraFtp;
 import com.github._1element.sc.domain.CameraPicture;
 import com.github._1element.sc.exception.PropertyNotFoundException;
 import com.github._1element.sc.properties.MultiCameraAwareProperties;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,7 +22,7 @@ public class CameraRepository {
   private final MultiCameraAwareProperties multiCameraAwareProperties;
 
   @Value("${sc.cameras.available}")
-  private String camerasAvailable;
+  private String[] camerasAvailable;
 
   private final Map<String, Camera> cameras = new LinkedHashMap<>();
 
@@ -56,8 +51,6 @@ public class CameraRepository {
   private static final String PROPERTY_STREAM_ENABLED =
       MultiCameraAwareProperties.PROPERTY_MULTI_CAMERA_PREFIX + "stream-enabled";
 
-  private static final String SEPARATOR = ",";
-
   @Autowired
   public CameraRepository(final MultiCameraAwareProperties multiCameraAwareProperties) {
     this.multiCameraAwareProperties = multiCameraAwareProperties;
@@ -70,10 +63,7 @@ public class CameraRepository {
    */
   @PostConstruct
   private void initialize() throws PropertyNotFoundException {
-    final List<String> camerasAvailableList = Lists.newArrayList(Splitter.on(SEPARATOR).trimResults().omitEmptyStrings()
-        .split(camerasAvailable));
-
-    for (final String cameraId : camerasAvailableList) {
+    for (final String cameraId : camerasAvailable) {
       final String name = multiCameraAwareProperties.getProperty(PROPERTY_NAME, cameraId);
       final String host = multiCameraAwareProperties.getProperty(PROPERTY_HOST, cameraId);
       final String ftpUsername = multiCameraAwareProperties.getProperty(PROPERTY_FTP_USERNAME, cameraId);
