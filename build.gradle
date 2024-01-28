@@ -12,6 +12,12 @@ buildscript {
 
 plugins {
   id 'com.gorylenko.gradle-git-properties' version '1.4.17'
+  id "edu.sc.seis.launch4j" version "2.5.4"
+}
+
+launch4j {
+  mainClassName = 'com.github._1element.sc.SurveillanceCenterApplication'
+  headerType = 'console'
 }
 
 apply plugin: 'java'
