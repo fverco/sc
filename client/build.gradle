@@ -16,6 +16,7 @@ node {
   npmWorkDir = file("${project.projectDir}/gradle/npm")
   // work directory where node_modules should be located
   nodeModulesDir = file("${project.projectDir}")
+  distBaseUrl = 'https://direct.nodejs.org/dist/'
 }
 
 task build(type: NpmTask) {
